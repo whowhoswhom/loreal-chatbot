@@ -1,0 +1,11 @@
+name = "loreal-chatbot-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# You'll add your OpenAI API key as a secret using:
+# wrangler secret put OPENAI_API_KEY
+# Then paste your key when prompted
+
+[env.production]
+name = "loreal-chatbot-worker"
+

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Oréal Smart Routine & Product Advisor</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header with Logo */
+        .header {
+            background: #000000;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #ff6b35;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
+        }
+
+        .logo-accent {
+            color: #ff6b35;
+        }
+
+        .subtitle {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+
+        /* Main Container */
+        .container {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Chat Display Area */
+        .chat-container {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+        }
+
+        .welcome-message h2 {
+            color: #000000;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .welcome-message p {
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Chat Messages */
+        .message {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 1rem 1.25rem;
+            border-radius: 20px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-bubble {
+            background: #000000;
+            color: #ffffff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-bubble {
+            background: #f0f0f0;
+            color: #000000;
+            border-bottom-left-radius: 5px;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .message-label {
+            font-size: 0.75rem;
+            color: #999;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff6b35;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Input Section */
+        .input-section {
+            background: #ffffff;
+            border-radius: 50px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #userInput {
+            flex: 1;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+            color: #000000;
+        }
+
+        #userInput::placeholder {
+            color: #999;
+        }
+
+        #sendButton {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        #sendButton:hover {
+            background: linear-gradient(135deg, #ff8c5a 0%, #ff6b35 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        #sendButton:active {
+            transform: translateY(0);
+        }
+
+        #sendButton:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            border-top: 3px solid #ff6b35;
+        }
+
+        .footer-links {
+            margin-top: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ff6b35;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff8c5a;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .chat-container {
+                padding: 1rem;
+                max-height: 400px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .message-bubble {
+                max-width: 90%;
+            }
+
+            #sendButton {
+                padding: 1rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            L'ORÉAL <span class="logo-accent">PARIS</span>
+        </div>
+        <div class="subtitle">Smart Routine & Product Advisor</div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Chat Display -->
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-message">
+                <h2>✨ Welcome to Your Personal Beauty Assistant</h2>
+                <p>I'm here to help you discover the perfect L'Oréal products and skincare routines tailored just for you.</p>
+                <p>Ask me about skincare, makeup, haircare, or get personalized product recommendations!</p>
+            </div>
+            
+            <div class="loading" id="loadingIndicator">
+                <span>L'Oréal is thinking</span>
+                <div class="loading-dots">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="userInput" 
+                placeholder="Ask about L'Oréal products, routines, or recommendations..."
+                aria-label="Chat input"
+            >
+            <button id="sendButton" aria-label="Send message">Send</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>&copy; 2025 L'Oréal Paris. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="https://www.lorealparisusa.com/privacy-policy" target="_blank">Privacy Policy</a>
+            <a href="https://www.lorealparisusa.com/contact-us" target="_blank">Contact Us</a>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatContainer = document.getElementById('chatContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        // Conversation history for context (LevelUp 1)
+        let conversationHistory = [];
+
+        // IMPORTANT: Replace this with your actual Cloudflare Worker URL after deployment
+        // For now, this is a placeholder - you'll update it after deploying to Cloudflare
+        const WORKER_URL = 'YOUR_WORKER_URL_HERE'; // e.g., 'https://loreal-chatbot-worker.your-subdomain.workers.dev'
+
+        // Initialize
+        console.log('L\'Oréal Chatbot loaded successfully');
+
+        // Send message function
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            
+            // Validate input
+            if (!message) return;
+
+            // Check if worker URL is configured
+            if (WORKER_URL === 'YOUR_WORKER_URL_HERE') {
+                displayError('⚠️ Please configure your Cloudflare Worker URL first. See console for instructions.');
+                console.error('SETUP REQUIRED: Update the WORKER_URL variable in index.html with your deployed Worker URL');
+                return;
+            }
+
+            // Disable input while processing
+            setInputEnabled(false);
+
+            // Clear welcome message on first interaction
+            const welcomeMessage = document.querySelector('.welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.remove();
+            }
+
+            // Display user message (LevelUp 2 & 3)
+            displayMessage(message, 'user');
+
+            // Clear input field
+            userInput.value = '';
+
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'user',
+                content: message
+            });
+
+            // Show loading indicator
+            loadingIndicator.classList.add('active');
+
+            try {
+                // Call Cloudflare Worker
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        messages: conversationHistory
+                    })
+                });
+
+                // Hide loading indicator
+                loadingIndicator.classList.remove('active');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Check for error in response
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Display bot response
+                displayMessage(data.message, 'bot');
+
+                // Add to conversation history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: data.message
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingIndicator.classList.remove('active');
+                
+                displayError('Sorry, I\'m having trouble connecting right now. Please try again in a moment. 💫');
+            }
+
+            // Re-enable input
+            setInputEnabled(true);
+            userInput.focus();
+        }
+
+        // Display message in chat (LevelUp 3: Chat bubbles)
+        function displayMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            const label = document.createElement('div');
+            label.className = 'message-label';
+            label.textContent = sender === 'user' ? 'You' : 'L\'Oréal Advisor';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = text;
+
+            messageDiv.appendChild(label);
+            messageDiv.appendChild(bubble);
+
+            // Insert before loading indicator
+            chatContainer.insertBefore(messageDiv, loadingIndicator);
+
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Display error message
+        function displayError(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+
+            const label = document.createElement('div');
+            label.className = 'message-label';
+            label.textContent = 'System';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.style.borderLeft = '3px solid #ff0000';
+            bubble.textContent = text;
+
+            messageDiv.appendChild(label);
+            messageDiv.appendChild(bubble);
+
+            chatContainer.insertBefore(messageDiv, loadingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Enable/disable input controls
+        function setInputEnabled(enabled) {
+            userInput.disabled = !enabled;
+            sendButton.disabled = !enabled;
+        }
+
+        // Event Listeners
+        sendButton.addEventListener('click', sendMessage);
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !sendButton.disabled) {
+                sendMessage();
+            }
+        });
+
+        // Optional: Add a clear conversation button (extra feature)
+        // You can add this to the HTML if desired
+        function clearConversation() {
+            conversationHistory = [];
+            chatContainer.innerHTML = `
+                <div class="welcome-message">
+                    <h2>✨ Welcome to Your Personal Beauty Assistant</h2>
+                    <p>I'm here to help you discover the perfect L'Oréal products and skincare routines tailored just for you.</p>
+                    <p>Ask me about skincare, makeup, haircare, or get personalized product recommendations!</p>
+                </div>
+                <div class="loading" id="loadingIndicator">
+                    <span>L'Oréal is thinking</span>
+                    <div class="loading-dots">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables (if you test locally)
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
