@@ -215,6 +215,7 @@ This is an individual academic project. However, suggestions and feedback are we
 ## 📧 Contact
 
 **Developer:** Jose Fuentes
+
 **Course:** GEN 301-51 Global Career Accelerator  
 **Institution:** University of Louisville  
 **Semester:** Fall 2025
