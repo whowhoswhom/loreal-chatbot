@@ -1,7 +1,7 @@
 # WD Project 8: Build a Chatbot for L'Oréal
 ## GEN 301-51 Global Career Accelerator
 
-**Student Name:** [Your Name]  
+**Student Name:** Jose Fuentes  
 **Date:** November 6, 2025  
 **Project:** L'Oréal Smart Routine & Product Advisor Chatbot
 
