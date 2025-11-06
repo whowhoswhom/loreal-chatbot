@@ -338,9 +338,8 @@
         // Conversation history for context (LevelUp 1)
         let conversationHistory = [];
 
-        // IMPORTANT: Replace this with your actual Cloudflare Worker URL after deployment
-        // For now, this is a placeholder - you'll update it after deploying to Cloudflare
-        const WORKER_URL = 'YOUR_WORKER_URL_HERE'; // e.g., 'https://loreal-chatbot-worker.your-subdomain.workers.dev'
+        // Cloudflare Worker URL - handles OpenAI API requests securely
+        const WORKER_URL = 'https://loreal-chatbot-worker.josefuentes2013-jf.workers.dev';
 
         // Initialize
         console.log('L\'Oréal Chatbot loaded successfully');
